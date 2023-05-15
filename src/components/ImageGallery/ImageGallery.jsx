@@ -11,8 +11,11 @@ export class ImageGallery extends Component {
         error: null,
         status: 'idle',
         images: [],
+        totalPages: 0,
 
     }
+
+
 
     componentDidUpdate(prevProps, prevState) {
         const prevQuery = prevProps.searchQuery;
@@ -20,8 +23,9 @@ export class ImageGallery extends Component {
         // console.log(prevQuery)
         // console.log(nextQuery)
 
+
         if (prevQuery !== nextQuery) {
-            this.setState({ status: 'pending' });
+            this.setState({ status: 'pending'});
             // console.log('Изменилось имя')
             // console.log(prevQuery)
             // console.log(nextQuery)
@@ -31,7 +35,7 @@ export class ImageGallery extends Component {
                     images,
                     status: 'resolved'
                 }))
-                .catch(error => this.setState({ error, status: 'rejected' }));
+                .catch(error => this.setState({ error, status: 'rejected'}), console.log('CATCH!'));
 
         } 
 
@@ -49,22 +53,26 @@ export class ImageGallery extends Component {
             return
         }
         if (this.state.status === 'rejected') {
-            console.log('error')
-             return
+           console.log('error message')
+            return 
+
         }
+        // if (this.state.images.length === 0) {
+        //     alert('Sorry, there are no images matching your search query. Please try again.')
+        //     return
+        // }
     
         if (this.state.status === 'resolved') {
             return (
                 <>
                     <ul className="gallery">
 
-                        {this.state.images.hits.map(({ webformatURL }) => {
+                        {this.state.images.hits.map(({ id, webformatURL, tags }) => {
                             return (
-                            <li className="gallery-item">
-                                <img src={webformatURL} alt="" />
+                            <li key={id} className="gallery-item">
+                                <img src={webformatURL} alt={tags} />
                             </li> 
                             )
-
                         }
 
                         )}  
@@ -77,8 +85,6 @@ export class ImageGallery extends Component {
 
     }
 }
-
-
 
 
 ImageGallery.propType = {
