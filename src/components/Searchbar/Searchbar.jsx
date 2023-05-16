@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import css from './Searchbar.module.css'
+import { ReactComponent as SearchBtn } from '../Icons/search.svg';
 
 
 export class Searchbar extends Component {
@@ -27,13 +29,15 @@ export class Searchbar extends Component {
 
 
     return (   
-    <header className="searchbar">
-        <form className="form" onSubmit={this.handleSubmit}>
-            <button type="submit" className="button">
-            <span className="buttonLabel">Search</span>
+    <header className={css.searchbar}>
+        <form className={css.form} onSubmit={this.handleSubmit}>
+            <button type="submit" className={css.buttonSerach}>
+                    <span className={css.buttonLabel}>
+                        <SearchBtn />
+                    </span>
             </button>
             <input
-                className="input"
+                className={css.input}
                 type="text"
                 autoComplete="off"
                 autoFocus

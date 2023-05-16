@@ -3,17 +3,20 @@ import PropTypes from 'prop-types';
 import getImagesAPI from 'services/getImages-api';
 import { Button } from 'components/Button/Button';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { Modal } from 'components/Modal/Modal';
+import { Loader } from 'components/Loader/Loader';
+import css from './ImageGallery.module.css'
 
 
 export class ImageGallery extends Component {
 
     state = {
-        searchQuery: '',
+        // searchQuery: '',
         page: 1,
         error: null,
         status: 'idle',
         images: [],
-        totalPages: 0,
+        showModal: false,
 
     }
 
@@ -26,26 +29,35 @@ export class ImageGallery extends Component {
         if (prevQuery !== nextQuery || prevState.page !== page) {
             this.setState({ status: 'pending' });
 
-            getImagesAPI
-                .getImages(nextQuery, page)
-                .then(images => {
-                    this.setState(prevState => ({
-                        images: [...prevState.images, ...images.hits],
-                        status: 'resolved',
-                        
-                    }));
-                    })
-                .catch(error => this.setState({ error, status: 'rejected' }), console.log('CATCH!'));
+            setTimeout(() => {
 
+                getImagesAPI
+                    .getImages(nextQuery, page)
+                    .then(images => {
+                        this.setState(prevState => ({
+                            images: [...prevState.images, ...images.hits],
+                            status: 'resolved',
+                            
+                        }));
+                        })
+                    .catch(error => this.setState({ error, status: 'rejected' }), console.log('CATCH!'));
+            }, 1000)
         } 
 
     }
 
 
-
     btnLoadMore = () => {
         this.setState(prevState => ({ page: prevState.page + 1 }));
     };
+
+    modalOpen = modalOpen => {
+    this.setState({ modalOpen, showModal: true });
+  };
+
+    modalClose = () => {
+    this.setState({ showModal: false });
+  };
 
 
     render() {
@@ -56,7 +68,9 @@ export class ImageGallery extends Component {
         }
         if (this.state.status === 'pending') {
             console.log('load')
-            return
+            return <Loader />
+                
+            
         }
 
         if (this.state.status === 'rejected') {
@@ -74,15 +88,20 @@ export class ImageGallery extends Component {
 
             return (
                 <>
-                    <ul className="gallery">
+                    <ul className={css.gallery}>
                         {this.state.images.map(image  => (
                             <ImageGalleryItem
                                     key={image.id}
                                     item={image}
+                                    imageOpen={this.modalOpen}
                                 />
                         ))}
                     </ul>
                     <Button onClick={this.btnLoadMore}>Load More</Button>
+                    
+                    {this.state.showModal && (
+                        <Modal modalOpen={this.state.modalOpen} modalClose={this.modalClose}/>
+                    )}
                 </>
             )
         }
