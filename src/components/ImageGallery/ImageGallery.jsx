@@ -34,8 +34,6 @@ export class ImageGallery extends Component {
             this.setState({page: 1})
           }
 
-            setTimeout(() => {
-
                 getImagesAPI
                     .getImages(nextQuery, page)
                     .then(images => {
@@ -46,7 +44,7 @@ export class ImageGallery extends Component {
                         }));
                     })
                     .catch(error => this.setState({ error, status: 'rejected' }));
-            }, 1000)
+            
         } 
 
     }
@@ -103,7 +101,7 @@ export class ImageGallery extends Component {
                         ))}
                     </ul>
 
-                    { this.state.page <= this.state.totalPages && (<Button onClick={this.btnLoadMore}>Load More</Button>)}
+                    { this.state.page <= this.state.totalPages && (<Button onClick={this.btnLoadMore}/>)}
                     
                     {this.state.showModal && (
                         <Modal modalOpen={this.state.modalOpen} modalClose={this.modalClose}/>

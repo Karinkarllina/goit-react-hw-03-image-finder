@@ -5,7 +5,7 @@ import css from './Button.module.css'
 export const Button = ({ children, onClick = null }) => {
   return (
     <div className={css.buttonLoadWrap}>
-      <button type='button' onClick={onClick} className={css.btnLoadMore}>{children}</button>
+      <button type='button' onClick={onClick} className={css.btnLoadMore}>Load More</button>
     </div>
     )
     
@@ -13,6 +13,5 @@ export const Button = ({ children, onClick = null }) => {
 
 
 Button.propTypes = {
-  onClick: PropTypes.func,
-  children: PropTypes.any,
+  onClick: PropTypes.func.isRequired,
 };
